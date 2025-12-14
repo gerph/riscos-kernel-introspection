@@ -1,0 +1,19 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+osbyte82  ROUT
+        MOV     r0, #&81
+        MOV     r1, #0
+        MOV     r2, #&FF
+        SWI     OS_Byte
+
+        PrintMessage "OS_Byte &81 to read OS version: "
+        PrintHex2 R1
+        SWI     OS_NewLine
+
+        MOV     pc, lr
+
+        END

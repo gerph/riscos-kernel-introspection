@@ -1,0 +1,6 @@
+s/(Darwin|Linux)/PLATFORM/
+s/x86_64/ARCHITECTURE/
+s/(Pyromaniac )\d+\.\d+[^ ]*/$1VERSION/
+s/\[.*\]/[QUALIFIER]/
+s/RISC OS \d\.\d\d/RISC OS V.VV/
+s/\(\d\d [A-Z][a-z][a-z] 20[2-9][0-9]\)/(DD MMM YYYY)/

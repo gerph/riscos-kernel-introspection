@@ -13,7 +13,7 @@
 #include "os.h"
 #include "osbyte.h"
 
-#define DEBUG
+// #define DEBUG
 
 
 #ifdef DEBUG

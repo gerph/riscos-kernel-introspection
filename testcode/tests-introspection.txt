@@ -1,0 +1,121 @@
+#
+# SUT:    Kernel: Introspection
+# Area:   Reading state
+# Class:  Functional
+# Type:   Integration test
+#
+
+Group: Introspection
+Command: $TOOL --quiet $FILE $ARGS
+Expect: expect/introspection/$BASE
+Disable: Not implemented
+
+Test: OS_Byte 0 - OS version
+File: bin.osbyte00
+Replace: expect/introspection/$BASE_replacements
+-Disable:
+RC: 1
+
+Test: OS_Byte &100 (top-24bits set on OS_Byte)
+File: bin.osbyte100
+Replace: expect/introspection/osbyte00_replacements
+-Disable:
+RC: 1
+
+Test: OS_Byte &81 (OS version)
+File: bin.osbyte81_version
+-Disable:
+
+Test: OS_Byte &81 (OS version, configured as Select)
+Command: $TOOL --quiet $FILE $ARGS --config systeminformation.osbyte129_osversion=A9
+File: bin.osbyte81_version
+Expect: expect/introspection/$BASE_configured
+Disable: Pyromaniac only
+
+Test: CPU (underlying emulation)
+File: bin.cpuid
+
+Test: System control register
+File: bin.sctlr
+
+Test: Startup (OS_Memory/OS_ReadSysInfo 9)
+File: bin.startup
+Replace: expect/$BASE_replacements
+
+Test: OS_ReadSysInfo 6
+File: bin.readsysinfo_kernelvalue
+
+Test: OS_ReadSysInfo 6 (error on unknown)
+Command: $TOOL --quiet --config osreadsysinfo.kernel_values_error=unknown $FILE $ARGS
+Expect: expect/introspection/$BASE_error_unknown
+File: bin.readsysinfo_kernelvalue
+
+Test: OS_ReadSysInfo 6 (error always)
+Command: $TOOL --quiet --config osreadsysinfo.kernel_values_error=yes $FILE $ARGS
+Expect: expect/introspection/$BASE_error_yes
+File: bin.readsysinfo_kernelvalue
+
+Test: OS_ReadSysInfo 5
+File: bin.readsysinfo_uniqueid
+
+Test: OS_ReadSysInfo 8
+File: bin.readsysinfo_platform
+
+Test: OS_ReadSysInfo 99
+File: bin.readsysinfo_invalid
+
+Test: OS_Memory 8 (amounts)
+File: bin.memoryinfo
+Args: a
+Expect: expect/introspection/$BASE_$ARG1
+
+Test: OS_Memory 9 (controller presence, 0)
+File: bin.memoryinfo
+Args: c
+Expect: expect/introspection/$BASE_$ARG1
+
+Test: OS_Memory 9 (controller presence, error)
+Command: $TOOL --quiet $FILE $ARGS --config osmemory.controller_presence_support=error
+File: bin.memoryinfo
+Args: c
+Expect: expect/introspection/$BASE_$ARG1_error
+
+Test: OS_ReadMemMapInfo
+File: bin.readmemmapinfo
+
+Test: OS_PlatformFeatures CodeFeatures
+File: bin.platformfeatures_codefeatures
+
+Test: OS_PlatformFeatures CodeFeatures (configured)
+Command: $TOOL --quiet $FILE $ARGS --config osplatformfeatures.codefeatures=synchronisecodeareasrequired,hardwarevectorsneed32bitmode,pcstoresplus8,dataabortsearly,operatingsystemis32bit,26bitunavailable,highvectors,nophysicalpages,invalidreasonsaresafe,CPUHasNoSWP
+File: bin.platformfeatures_codefeatures
+Expect: expect/introspection/$BASE_configured
+
+Test: OS_PlatformFeatures Cache information
+File: bin.platformfeatures_cacheinfo
+
+Test: OS_PlatformFeatures CPURegisters
+File: bin.platformfeatures_describecpuregisters
+
+
+Group: OS_Memory Physical Table
+Command: $TOOL --quiet $FILE $ARG1 --config osmemory.physical_table_support=$ARG2
+Expect: expect/introspection/$BASE_$ARG1_$ARG2
+Disable: Not implemented
+
+Test: OS_Memory 6/7 (physical table), error
+File: bin.memoryinfo
+Args: t error
+RC: 1
+
+Test: OS_Memory 6/7 (physical table), zero
+File: bin.memoryinfo
+Args: t zero
+
+Test: OS_Memory 6/7 (physical table), small-empty
+File: bin.memoryinfo
+Args: t small-empty
+
+Test: OS_Memory 6/7 (physical table), small-populated
+File: bin.memoryinfo
+Args: t small-populated
