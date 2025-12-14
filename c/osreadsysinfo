@@ -1,0 +1,468 @@
+/*******************************************************************
+ * File:        osreadsysinfo
+ * Purpose:     OS_ReadSysInfo implementation
+ * Author:      Gerph
+ * Date:        14 Dec 2025
+ ******************************************************************/
+
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "modhead.h"
+
+#include "riscos/OSReadSysInfo.h"
+
+#define DEBUG
+
+
+#ifdef DEBUG
+#define dprintf if (1) printf
+#else
+#define dprintf if (0) printf
+#endif
+
+
+_kernel_oserror *readsysinfo_configuredscreensize(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &00 - Configured screen size
+
+    =>  R0 = 0
+
+    <=  R0 = configured size (0)
+    */
+    _kernel_oserror *err = NULL;
+    r->r[0] = 0; /* FIXME: Read the configured size */
+    return err;
+}
+
+_kernel_oserror *readsysinfo_configuredmode(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &01 - Read the configured Mode/WimpMode, MonitorType, and Sync
+
+    =>  R0 = 1 (reason code)
+    <=  R0 = configured Mode/WimpMode
+        R1 = configured MonitorType
+        R2 = configured Sync
+    */
+    _kernel_oserror *err = NULL;
+    r->r[0] = 27; /* FIXME: Read the configured mode */
+    r->r[1] = 7; /* FIXME: Read the configured monitor type */
+    r->r[2] = 0; /* FIXME: Read the configured sync */
+    return err;
+}
+
+_kernel_oserror *readsysinfo_chipsanduniqueid(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &02 - Chips and Unique ID
+
+    =>  R0 = 2
+
+    <=  R0 = hardware configuration word 0
+                bits 0-7 = special functions chip type
+                                0 => none
+                                1 => IOEB
+                bits 8-15 = I/O control chip type
+                                0 => IOC
+                                1 => IOMD
+                bits 16-23 = memory control chip type
+                                0 => MEMC1/MEMC1a
+                                1 => IOMD
+                bits 24-31 = video control chip type
+                                0 => VIDC1a
+                                1 => VIDC20
+        R1 = hardware configuration word 1
+                bits 0-7 = I/O chip type
+                                0 => absent
+                                1 => 82C710/711 or SMC'665 or similar
+                bits 8-31 reserved (set to 0)
+        R2 = hardware configuration word 2
+                bits 0-7 = LCD controller type
+                                0 => absent
+                                1 => present (type 1) eg A4 portable
+                                2 => present (type 2) eg Stork portable
+                bits 8-15 = IOMD variant
+                                0 => IOMD
+                                1 => IOMDL ie ARM7500 (Morris)
+                bits 16-23 = VIDC20 variant
+                                0 => VIDC20
+                                1 => VIDC2L ie ARM7500 (Morris)
+                bit 24 = IIC bus speed (unset = 100kHz, set = 400kHz)
+                bit 25 = IO clock state when idling (unset = running, set = stopped)
+                bits 26-31 reserved (set to 0)
+        R3 = word 0 of unique machine ID, or 0 if unavailable
+        R4 = word 1 of unique machine ID, or 0 if unavailable
+    */
+    _kernel_oserror *err = NULL;
+
+    uint32_t special_functions = ReadSysInfoReason_ChipsAndUniqueID_Special_None << ReadSysInfoReason_ChipsAndUniqueID_SpecialShift;
+    uint32_t iocontrol = ReadSysInfoReason_ChipsAndUniqueID_IO_Undefined << ReadSysInfoReason_ChipsAndUniqueID_IOShift;
+    // FIXME: Check that 255 means undefined/none for memc - it's not in the Kernel lists
+    uint32_t memorycontrol = 0xff << ReadSysInfoReason_ChipsAndUniqueID_MemShift;
+    uint32_t videocontrol = ReadSysInfoReason_ChipsAndUniqueID_Vid_Undefined << ReadSysInfoReason_ChipsAndUniqueID_VidShift;
+
+    uint32_t iotype = ReadSysInfoReason_ChipsAndUniqueID_IOType_None << ReadSysInfoReason_ChipsAndUniqueID_IOTypeShift;
+
+    uint32_t lcdcontrol = ReadSysInfoReason_ChipsAndUniqueID_LCDType_None << ReadSysInfoReason_ChipsAndUniqueID_LCDTypeShift;
+    uint32_t iomdvariant = ReadSysInfoReason_ChipsAndUniqueID_IOMDType_None << ReadSysInfoReason_ChipsAndUniqueID_IOMDTypeShift;
+    uint32_t vidcvariant = ReadSysInfoReason_ChipsAndUniqueID_VIDC20Type_None << ReadSysInfoReason_ChipsAndUniqueID_VIDC20TypeShift;
+    uint32_t iicspeed = ReadSysInfoReason_ChipsAndUniqueID_IICBus_Slow;
+
+    uint32_t ioclock = ReadSysInfoReason_ChipsAndUniqueID_IOClocks_RunOnIdle;
+
+    r->r[0] = special_functions | iocontrol | memorycontrol | videocontrol;
+    r->r[1] = iotype;
+    r->r[2] = lcdcontrol | iomdvariant | vidcvariant | iicspeed | ioclock;
+    r->r[3] = 0; /* FIXME: Read Unique ID */
+    r->r[4] = 0; /* FIXME: Read Unique ID */
+    return err;
+}
+
+_kernel_oserror *readsysinfo_iofeatures(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &03 - IOFeatures
+
+    =>  R0 = 3
+
+    <=  R0 = I/O chip base features mask                710     711     665    SMC669
+                Bits 0..3   Base IDE type               1       1       1      1
+                Bits 4..7   Base FDC type               1       1       1      1
+                Bits 8..11  Base parallel type          1       1       1      1
+                Bits 12..15 Base 1st serial type        1       1       1      1
+                Bits 16..19 Base 2nd serial type        0       1       1      1
+                Bits 20..23 Base Config type            1       2       3      4
+                Bits 24..31 Reserved                    0       0       0      0
+        R1 = I/O chip extra features mask               710     711     665    SMC669
+                Bits 0..3   IDE extra features          0       0       0      0
+                Bits 4..7   FDC extra features          0       0       0      0
+                Bits 8..11  parallel extra features     0       0       1      1
+                Bits 12..15 1st serial extra features   0       0       1      1
+                Bits 16..19 2nd serial extra features   0       0       1      1
+                Bits 20..23 config extra features       0       0       0      0
+                Bits 24..31 Reserved                    0       0       0      0
+        R2-R4 undefined (reserved for future expansion)
+    */
+    _kernel_oserror *err = NULL;
+
+    uint32_t ide = ReadSysInfoReason_IOFeatures_IDE_Absent << ReadSysInfoReason_IOFeatures_IDEShift;
+    uint32_t floppy = ReadSysInfoReason_IOFeatures_Floppy_Absent << ReadSysInfoReason_IOFeatures_FloppyShift;
+    uint32_t parallel = ReadSysInfoReason_IOFeatures_Parallel_Absent << ReadSysInfoReason_IOFeatures_ParallelShift;
+    uint32_t serial1 = ReadSysInfoReason_IOFeatures_Serial1_Absent << ReadSysInfoReason_IOFeatures_Serial1Shift;
+    uint32_t serial2 = ReadSysInfoReason_IOFeatures_Serial2_Absent << ReadSysInfoReason_IOFeatures_Serial2Shift;
+    // FIXME: Check that 255 means undefined for the configuration
+    uint32_t config = 0xff << ReadSysInfoReason_IOFeatures_ConfigShift;
+
+    uint32_t eide = 0 << ReadSysInfoReason_IOFeatures_EIDEShift;
+    uint32_t efloppy = 0 << ReadSysInfoReason_IOFeatures_EFloppyShift;
+    uint32_t eparallel = 0 << ReadSysInfoReason_IOFeatures_EParallelShift;
+    uint32_t eserial1 = 0 << ReadSysInfoReason_IOFeatures_ESerial1Shift;
+    uint32_t eserial2 = 0 << ReadSysInfoReason_IOFeatures_ESerial2Shift;
+    uint32_t econfig = 0 << ReadSysInfoReason_IOFeatures_EConfigShift;
+
+    r->r[0] = ide | floppy | parallel | serial1 | serial2 | config;
+    r->r[1] = eide | efloppy | eparallel | eserial1 | eserial2 | econfig;
+    r->r[2] = 0;
+    r->r[3] = 0;
+    r->r[4] = 0;
+    return err;
+}
+
+_kernel_oserror *readsysinfo_ethernetaddress(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &04 - Ethernet address
+
+    =>  R0 = 4
+
+    <=  R0 = LSW of MAC, or 0
+        R1 = MSW of MAC, or 0
+    */
+    _kernel_oserror *err = err_NotImplemented;
+
+    r->r[0] = 0; /* FIXME: Get Mac address */
+    r->r[1] = 0; /* FIXME: Get Mac address */
+    return err;
+}
+
+_kernel_oserror *readsysinfo_rawuniqueid(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &05 - Raw unique ID
+
+    =>  R0 = 5
+
+    <=  R0 = LSW of ID
+        R1 = MSW of ID
+    */
+    _kernel_oserror *err = NULL;
+
+    r->r[3] = 0; /* FIXME: Read Unique ID */
+    r->r[4] = 0; /* FIXME: Read Unique ID */
+    return err;
+}
+
+_kernel_oserror *readsysinfo_kernelvalue(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &06 - Read Kernel Value
+
+    =>      R0 = 6
+
+            R1 -> input block, 1 word per entry, giving number of value required, terminated by -1
+        OR: R1 =  0 if just 1 value is required, and this is to beturned in r2
+            R2 -> output block, 1 word per entry, will be filled in on output
+        OR: R2 =  number of single value required, if r1 = 0
+
+    <=  if r1 entry != 0:
+              r0,r1,r2 preserved
+              output block filled in, filled in value(s) set to 0 if unrecognised/no longer meaningful
+        if r1 entry = 0:
+              r0,r1 preserved
+              r2 = single value required, or set to 0 if if unrecognised/no longer meaningful value
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    /* This should not be implemented for RISC OS 64; it will need a 32-bit implementation though */
+    return err;
+}
+
+_kernel_oserror *readsysinfo_lastabort(_kernel_swi_regs *r)
+{
+    /*
+        OS_ReadSysInfo 7 - Abort information for last abort
+
+    =>  R0 = 7
+
+    <=  R0 preserved
+        R1 = 32-bit PC of last abort
+        R2 = 32-bit PSR of last abort
+        R3 = fault address of last abort
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *readsysinfo_platformclass(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &08 - Read Platform Class
+
+    =>  R0 = 8
+
+    <=  R0 = platform class
+             currently defined classes are:
+                0 = unspecified platform (r1,r2 will be 0)
+                1 = Medusa   (currently returned for Risc PC only)
+                2 = Morris   (currently returned for A7000 only)
+                3 = Morris+  (currently returned for A7000+ and R7500)
+                4 = Phoebe   (currently returned for Risc PC 2 only)
+                5 = HAL      (RISC OS 5 - never returned by us)
+                6 = Virtual RPC (not currently implemented)
+                7 = A9 (yellow1)
+                16 = Pyromaniac
+                all other values currently reserved
+        R1 = 32 additional platform specifier flags (if defined)
+             bits 0..31 = value of flags 0..31 if defined, 0 if undefined
+        R2 = defined status of the 32 flags in r1
+             bits 0..31 = status of flags 0..31
+                          0 = flag is undefined in this OS version
+                          1 = flag is defined in this OS version
+    The current flag definitions for r1 (1=supported, 0=unsupported) are :
+
+        0     = Podule expansion card(s)
+        1     = PCI expansion card(s)
+        2     = additional processor(s)
+        3     = auto power off by OS_Reset '&OFF' (never use this -
+                people should be using the Portable module for power
+                management)
+        4     = OS runs from RAM
+        5     = OS uses rotated loads
+        6     = OS uses unaligned loads/stores
+        5..31 reserved (currently undefined)
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *readsysinfo_rominformation(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo &09 - Read ROM Information
+
+    =>  R0 = 8
+        R1 = item requested
+
+    <=  R0 = pointer to requested string, or 0 if not assigned
+    */
+
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *readsysinfo_osversion(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo 10 (read OS version)
+    => R0 = 10
+    <= R0 = OS version number * 100
+       R1 = Kernel version number * 100
+       R2 = SystemInit version number and system type:
+              bits 0-15  = version number
+              bits 16-31 = init type:
+                               0 = RiscPC
+                           other = reserved
+       R3 = Reserved (0)
+
+    This SWI is used to read the version number of the Operating System and
+    Kernel. In order to differentiate between the OS as a whole and the Kernel
+    itself, this SWI provides a mechanism for reading the version number of
+    both.
+
+    The operating system version is contained within the help string for the
+    UtilityModule. This describes the system as a whole. It should be used when
+    checking for the general level of compatibility is required.
+
+    The Kernel version has, in the past, only been returned by the return from
+    OS_Byte 0 as part of the error report. This interface defines a mechanism by
+    which the version can be obtained without needing to parse a free-format
+    string.
+
+    The SystemInit version number and system type are returned by the
+    initialisation code and indicate the basic loader which is used to enter
+    the Operating System.
+
+    The value returned in R3 will be defined in a future version of this call,
+    and should not be interpreted by software.
+
+    This SWI call is available from Kernel 9.03.
+    */
+
+    _kernel_oserror *err = err_NotImplemented;
+
+    /*
+    os_version = int(float(ro.kernel.osversion) * 100)
+    kernel_version = int(float(ro.kernel.version) * 100)
+    sysinit_version = 0 | (0<<16)
+
+    regs[0] = os_version
+    regs[1] = kernel_version
+    regs[2] = sysinit_version
+    regs[3] = 0
+    */
+
+    return err;
+}
+
+_kernel_oserror *readsysinfo_debuginformation(_kernel_swi_regs *r)
+{
+    /*
+    OS_ReadSysInfo 11 (read debug information)
+
+    => R0 = 11
+    <= R0 = pointer to function for debug character output
+       R1 = pointer to function for debug character input
+
+    This SWI is used to read the diagnostic functions provided by the SystemInit
+    code in order to debug the system. Usually this is a simple serial I/O
+    stream which is managed by the SystemInit code, although other mechanisms
+    may be employed dependent on hardware. The functions are expected to be
+    called from a privileged mode, although operation in non-privileged modes
+    is at that discretion of the SystemInit code. The functions have the
+    following parameters:
+
+    Debug output function
+    => R0 = character to write to debug stream
+    <= R0-R3, PSR corrupt
+
+    Debug input function
+    => none
+    <= R0 = character read from debug stream, or -1 if no character available
+       R1-R3, PSR corrupt
+
+    Both routines expect a small amount of stack to be available.
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+
+
+
+/***************************************************************************
+ * Description:  SWI handler routine. All SWIs for this module will be
+ *               passed to these routines.
+ * Parameters:   number = SWI number within SWI chunk (i.e. 0 to 63)
+ *               r      = pointer to register block on entry
+ *               pw     = private word for module
+ * On exit:      Return NULL if SWI handled successfully, setting return
+ *               register values (r0-r9) in r.
+ *               Return error_BAD_SWI for out of range SWIs.
+ *               Return an error block for a custom error.
+ **************************************************************************/
+/* Functions called to handle particular SWI calls */
+_kernel_oserror *SWI_ReadSysInfo(int number, _kernel_swi_regs *r, void *pw)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    int reason = r->r[0];
+
+    dprintf("OS_ReadSysInfo #%i\n", reason);
+
+    switch (reason)
+    {
+
+        case ReadSysInfoReason_ConfiguredScreenSize:
+            err = readsysinfo_configuredscreensize(r);
+            break;
+
+        case ReadSysInfoReason_ConfiguredMode:
+            err = readsysinfo_configuredmode(r);
+            break;
+
+        case ReadSysInfoReason_ChipsAndUniqueID:
+            err = readsysinfo_chipsanduniqueid(r);
+            break;
+
+        case ReadSysInfoReason_IOFeatures:
+            err = readsysinfo_iofeatures(r);
+            break;
+
+        case ReadSysInfoReason_EthernetAddress:
+            err = readsysinfo_ethernetaddress(r);
+            break;
+
+        case ReadSysInfoReason_RawUniqueID:
+            err = readsysinfo_rawuniqueid(r);
+            break;
+
+        case ReadSysInfoReason_KernelValue:
+            err = readsysinfo_kernelvalue(r);
+            break;
+
+        case ReadSysInfoReason_LastAbort:
+            err = readsysinfo_iofeatures(r);
+            break;
+
+        case ReadSysInfoReason_PlatformClass:
+            err = readsysinfo_platformclass(r);
+            break;
+
+        case ReadSysInfoReason_ROMInformation:
+            err = readsysinfo_rominformation(r);
+            break;
+
+        case ReadSysInfoReason_OSVersion:
+            err = readsysinfo_osversion(r);
+            break;
+
+        case ReadSysInfoReason_DebugInformation:
+            err = readsysinfo_debuginformation(r);
+            break;
+
+        default:
+            err = err_NotImplemented;
+            break;
+    }
+    return err;
+}

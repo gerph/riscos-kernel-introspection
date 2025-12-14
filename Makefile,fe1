@@ -31,6 +31,11 @@ INCLUDES   =
 # (${CLIB} is implicit, unless NOCLIB = yes)
 LIBS       =
 
+# Options, specified with a + or -
+OPTS       =
+OPTS      += +MODULE_SWIS
+OPTS      += +OS_SWIS
+
 # Space separated list of defines to set, eg -DDEBUG
 CDEFINES   =
 
@@ -39,6 +44,8 @@ OBJS       = o.modhead \
              o.module \
              o.os \
              o.osbyte \
+             o.osreadsysinfo \
+             o.osswis \
 
 
 include CModule
