@@ -199,8 +199,8 @@ _kernel_oserror *readsysinfo_rawuniqueid(_kernel_swi_regs *r)
     */
     _kernel_oserror *err = NULL;
 
-    r->r[3] = 0; /* FIXME: Read Unique ID */
-    r->r[4] = 0; /* FIXME: Read Unique ID */
+    r->r[0] = 0; /* FIXME: Read Unique ID */
+    r->r[1] = 0; /* FIXME: Read Unique ID */
     return err;
 }
 
@@ -282,7 +282,41 @@ _kernel_oserror *readsysinfo_platformclass(_kernel_swi_regs *r)
         6     = OS uses unaligned loads/stores
         5..31 reserved (currently undefined)
     */
-    _kernel_oserror *err = err_NotImplemented;
+
+#define ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads (1<<5)
+#define ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores (1<<6)
+
+    _kernel_oserror *err = NULL;
+    uint32_t platformflags = 0;
+    uint32_t platformflagsvalid;
+    uint32_t platformclass = ReadSysInfoReason_PlatformClass_Type_Unknown;
+
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_Podule;
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_PCI;
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor;
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded;
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads;
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores;
+    if (1)
+        platformflags |= ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff;
+
+    platformflagsvalid = ReadSysInfoReason_PlatformClass_Feature_Podule | \
+                         ReadSysInfoReason_PlatformClass_Feature_PCI | \
+                         ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor | \
+                         ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff | \
+                         ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded | \
+                         ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads | \
+                         ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores;
+
+    r->r[0] = platformclass;
+    r->r[1] = platformflags;
+    r->r[2] = platformflagsvalid;
     return err;
 }
 
@@ -461,6 +495,7 @@ _kernel_oserror *SWI_ReadSysInfo(int number, _kernel_swi_regs *r, void *pw)
             break;
 
         default:
+        /* FIXME: Should be Bad ReadSysInfo */
             err = err_NotImplemented;
             break;
     }

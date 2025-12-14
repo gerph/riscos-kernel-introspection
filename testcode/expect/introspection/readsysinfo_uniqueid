@@ -1,0 +1,4 @@
+Read Unique ID
+OS_ReadSysInfo #5
+Low word: &00000000
+High word: &00000000

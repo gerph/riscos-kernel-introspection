@@ -1,0 +1,26 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+
+readsysinfo     ROUT
+
+        PrintLine "Invalid request"
+
+        MOV     r0, #99
+        SWI     XOS_ReadSysInfo
+        BVC     %FT10
+        PrintMessage "Error returned: "
+        PrintError
+        SWI     OS_NewLine
+        B       %FT20
+
+10
+        PrintLine "No error"
+
+20
+        MOV     pc, lr
+
+        END

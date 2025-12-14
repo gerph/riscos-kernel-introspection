@@ -1,0 +1,21 @@
+Platform information:
+OS_ReadSysInfo #8
+Platform class: 0   Unknown
+
+Supported features:
+Bit: .......1  SET                 ReadSysInfoReason_PlatformClass_Feature_Podule
+Bit: ......1.  SET                 ReadSysInfoReason_PlatformClass_Feature_PCI
+Bit: .....1..  SET                 ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor
+Bit: ....1...  SET                 ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff
+Bit: ...1....  SET                 ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded
+Bit: ..1.....  SET                 ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads
+Bit: .1......  SET                 ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores
+
+Valid features:
+Bit: .......1  SET                 ReadSysInfoReason_PlatformClass_Feature_Podule
+Bit: ......1.  SET                 ReadSysInfoReason_PlatformClass_Feature_PCI
+Bit: .....1..  SET                 ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor
+Bit: ....1...  SET                 ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff
+Bit: ...1....  SET                 ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded
+Bit: ..1.....  SET                 ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads
+Bit: .1......  SET                 ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores

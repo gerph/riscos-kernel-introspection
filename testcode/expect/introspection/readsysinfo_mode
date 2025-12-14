@@ -1,0 +1,8 @@
+Read Screen Size...
+OS_ReadSysInfo #0
+Configured screen size: &00000000
+Read Mode configuration...
+OS_ReadSysInfo #1
+Configured mode: 27
+Configured monitor type: 7
+Configured sync: 0

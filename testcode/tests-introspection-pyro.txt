@@ -42,27 +42,37 @@ Test: Startup (OS_Memory/OS_ReadSysInfo 9)
 File: bin/startup
 Replace: expect/$BASE_replacements
 
+Test: OS_ReadSysInfo 0/1
+File: bin/readsysinfo_mode
+-Disable:
+
 Test: OS_ReadSysInfo 6
 File: bin/readsysinfo_kernelvalue
+-Disable:
 
 Test: OS_ReadSysInfo 6 (error on unknown)
 Command: $TOOL --config osreadsysinfo.kernel_values_error=unknown $FILE $ARGS
 Expect: expect/introspection/$BASE_error_unknown
 File: bin/readsysinfo_kernelvalue
+Disable: Pyromaniac only
 
 Test: OS_ReadSysInfo 6 (error always)
 Command: $TOOL --config osreadsysinfo.kernel_values_error=yes $FILE $ARGS
 Expect: expect/introspection/$BASE_error_yes
 File: bin/readsysinfo_kernelvalue
+Disable: Pyromaniac only
 
 Test: OS_ReadSysInfo 5
 File: bin/readsysinfo_uniqueid
+-Disable:
 
 Test: OS_ReadSysInfo 8
 File: bin/readsysinfo_platform
+-Disable:
 
 Test: OS_ReadSysInfo 99
 File: bin/readsysinfo_invalid
+-Disable:
 
 Test: OS_Memory 8 (amounts)
 File: bin/memoryinfo

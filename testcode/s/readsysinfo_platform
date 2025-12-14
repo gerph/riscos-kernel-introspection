@@ -1,0 +1,92 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+        GET     hdr.macros
+
+ReadSysInfoReason_PlatformClass * 0x8
+
+ReadSysInfoReason_PlatformClass_Type_Unknown * 0x0
+ReadSysInfoReason_PlatformClass_Type_RiscPC * 0x1
+ReadSysInfoReason_PlatformClass_Type_A7000 * 0x2
+ReadSysInfoReason_PlatformClass_Type_A7000Plus * 0x3
+ReadSysInfoReason_PlatformClass_Type_Phoebe * 0x4
+ReadSysInfoReason_PlatformClass_Type_HAL * 0x5
+ReadSysInfoReason_PlatformClass_Type_VRPC * 0x6
+ReadSysInfoReason_PlatformClass_Type_A9 * 0x7
+ReadSysInfoReason_PlatformClass_Type_Pyromaniac * 0x10
+ReadSysInfoReason_PlatformClass_Feature_Podule * 0x1
+ReadSysInfoReason_PlatformClass_Feature_PCI * 0x2
+ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor * 0x4
+ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff * 0x8
+ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded * 0x10
+ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads * (1<<5)
+ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores * (1<<6)
+
+
+readsysinfo_platform     ROUT
+        PrintLine "Platform information:"
+
+        XSWI    OS_ReadSysInfo, 8
+
+        PrintMessage "Platform class: "
+        PrintInteger r0, 4
+
+        ADRL    r3, string_Unknown
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_RiscPC
+        ADREQL  r3, string_RiscPC
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_A7000
+        ADREQL  r3, string_A7000
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_A7000Plus
+        ADREQL  r3, string_A7000Plus
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_Phoebe
+        ADREQL  r3, string_Phoebe
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_HAL
+        ADREQL  r3, string_HAL
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_VRPC
+        ADREQL  r3, string_VRPC
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_A9
+        ADREQL  r3, string_A9
+        TEQ     r0, #ReadSysInfoReason_PlatformClass_Type_Pyromaniac
+        ADREQL  r3, string_Pyromaniac
+
+        XSWI    XOS_Write0, r3
+        SWI     XOS_NewLine
+
+        SWI     XOS_NewLine
+        PrintLine "Supported features:"
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_Podule, 8
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_PCI, 8
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor, 8
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff, 8
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded, 8
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads, 8
+        PrintNamedBits r1, ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores, 8
+
+
+        SWI     XOS_NewLine
+        PrintLine "Valid features:"
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_Podule, 8
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_PCI, 8
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_ExtraProcessor, 8
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_AutoPowerOff, 8
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_OSRAMLoaded, 8
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_OSUsesRotatedLoads, 8
+        PrintNamedBits r2, ReadSysInfoReason_PlatformClass_Feature_OSUsesUnalignedLoadsStores, 8
+
+        MOV     pc, lr
+
+
+string_Unknown = "Unknown", 0
+string_RiscPC = "RiscPC", 0
+string_A7000 = "A7000", 0
+string_A7000Plus = "A7000Plus", 0
+string_Phoebe = "Phoebe", 0
+string_HAL = "HAL", 0
+string_VRPC = "VRPC", 0
+string_A9 = "A9", 0
+string_Pyromaniac = "Pyromaniac", 0
+
+
+        END

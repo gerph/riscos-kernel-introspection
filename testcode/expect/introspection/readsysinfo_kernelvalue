@@ -1,0 +1,16 @@
+Single value request
+RSI 6,0 : OS_ReadSysInfo #6
+Error (CamEntriesPointer) : [&00840000] NotImplemented:Not implemented
+RSI 6,15: OS_ReadSysInfo #6
+Error (UNDSTK) : [&00840000] NotImplemented:Not implemented
+RSI 6,16: OS_ReadSysInfo #6
+Error (SVCSTK) : [&00840000] NotImplemented:Not implemented
+RSI 6,25: OS_ReadSysInfo #6
+Error (IRQSTK) : [&00840000] NotImplemented:Not implemented
+RSI 6,17: OS_ReadSysInfo #6
+Error (SysHeapStart) : [&00840000] NotImplemented:Not implemented
+RSI 6,24: OS_ReadSysInfo #6
+Error (NVECTORS) : [&00840000] NotImplemented:Not implemented
+Multiple value request
+OS_ReadSysInfo #6
+Error returned: [&00840000] NotImplemented:Not implemented

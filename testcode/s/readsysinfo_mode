@@ -1,0 +1,53 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+
+readsysinfo     ROUT
+
+        PrintLine "Read Screen Size..."
+
+        MOV     r0, #0
+        SWI     XOS_ReadSysInfo
+        BVC     %FT10
+        PrintMessage "Error returned: "
+        PrintError
+        SWI     OS_NewLine
+        B       %FT20
+
+10
+        PrintMessage "Configured screen size: "
+        PrintHex r0
+        SWI     OS_NewLine
+
+20
+
+        PrintLine "Read Mode configuration..."
+
+        MOV     r0, #1
+        SWI     XOS_ReadSysInfo
+        BVC     %FT30
+        PrintMessage "Error returned: "
+        PrintError
+        SWI     OS_NewLine
+        B       %FT40
+
+30
+        PrintMessage "Configured mode: "
+        PrintInteger r0
+        SWI     OS_NewLine
+
+        PrintMessage "Configured monitor type: "
+        PrintInteger r1
+        SWI     OS_NewLine
+
+        PrintMessage "Configured sync: "
+        PrintInteger r2
+        SWI     OS_NewLine
+
+40
+        MOV     pc, lr
+
+        END
