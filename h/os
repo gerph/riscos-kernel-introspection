@@ -1,0 +1,34 @@
+/*******************************************************************
+ * File:        os
+ * Purpose:     OS interfaces
+ * Author:      Gerph
+ * Date:        28 May 2025
+ ******************************************************************/
+
+#ifndef OS_H
+#define OS_H
+
+#include "swis.h"
+
+
+/*************************************************** Gerph *********
+ Function:      os_claim
+ Description:   Claim a vector
+ Parameters:    vector = the vector number
+                func-> the entry point to call
+                pw = the private word
+ Returns:       pointer to error, or NULL if claimed ok
+ ******************************************************************/
+_kernel_oserror *os_claim(int vector, void (*func)(void), void *pw);
+
+/*************************************************** Gerph *********
+ Function:      os_release
+ Description:   Release a vector
+ Parameters:    vector = the vector number
+                func-> the entry point to call
+                pw = the private word
+ Returns:       pointer to error, or NULL if claimed ok
+ ******************************************************************/
+_kernel_oserror *os_release(int vector, void (*func)(void), void *pw);
+
+#endif

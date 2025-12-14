@@ -36,12 +36,16 @@ CDEFINES   =
 
 # Objects to build, using the format o.<name> (will be varied for build type)
 OBJS       = o.modhead \
-			 o.module
+             o.module \
+             o.os \
+             o.osbyte \
+
 
 include CModule
 
 # Additional dependencies
 $(OZDIR).module: h.modhead
+$(OZDIR).osbyte: h.modhead
 
 # Export rules
 # For any files you export with EXPORTS you may need to include an

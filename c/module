@@ -1,7 +1,7 @@
 /*******************************************************************
  * File:        module
  * Purpose:     KernelIntrospection module interface
- * Author:      YOUR NAME
+ * Author:      Gerph
  ******************************************************************/
 
 #include <stdlib.h>
@@ -9,6 +9,18 @@
 
 #include "kernel.h"
 #include "modhead.h"
+
+#include "os.h"
+#include "osbyte.h"
+
+#define DEBUG
+
+
+#ifdef DEBUG
+#define dprintf if (1) printf
+#else
+#define dprintf if (0) printf
+#endif
 
 
 /***************************************************************************
@@ -25,7 +37,11 @@
  **************************************************************************/
 _kernel_oserror *Mod_Init(const char *tail, int podule_base, void *pw)
 {
-    printf("Module KernelIntrospection initialised\n");
+    _kernel_oserror *err;
+    err = osbyte_init(pw);
+    if (err)
+        return err;
+    dprintf("Module KernelIntrospection initialised\n");
     return NULL;
 }
 
@@ -44,6 +60,10 @@ _kernel_oserror *Mod_Init(const char *tail, int podule_base, void *pw)
  **************************************************************************/
 _kernel_oserror *Mod_Final(int fatal, int podule_base, void *pw)
 {
-    printf("Module KernelIntrospection dying\n");
+    _kernel_oserror *err;
+    dprintf("Module KernelIntrospection dying\n");
+    err = osbyte_final(pw);
+    if (err)
+        return err;
     return NULL;
 }

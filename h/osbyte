@@ -1,0 +1,32 @@
+/*******************************************************************
+ * File:        osbyte
+ * Purpose:     Implementation of the OS_Byte vector handlers
+ * Author:      Gerph
+ * Date:        14 Dec 2025
+ ******************************************************************/
+
+#ifndef OSBYTE_H
+#define OSBYTE_H
+
+#include <stdlib.h>
+#include "kernel.h"
+
+
+/*************************************************** Gerph *********
+ Function:      osbyte_init
+ Description:   Claim vectors and initialise state
+ Parameters:    pw = module private word
+ Returns:       pointer to error, or NULL if all ok
+ ******************************************************************/
+_kernel_oserror *osbyte_init(void *pw);
+
+
+/*************************************************** Gerph *********
+ Function:      osbyte_final
+ Description:   Release vectors and shutdown
+ Parameters:    pw = module private word
+ Returns:       pointer to error, or NULL if all ok
+ ******************************************************************/
+_kernel_oserror *osbyte_final(void *pw);
+
+#endif

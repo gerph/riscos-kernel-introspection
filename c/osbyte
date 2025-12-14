@@ -1,0 +1,72 @@
+/*******************************************************************
+ * File:        osbyte
+ * Purpose:     Implementation of the OS_Byte vector handlers
+ * Author:      Gerph
+ * Date:        14 Dec 2025
+ ******************************************************************/
+
+#include <stdlib.h>
+#include <stdio.h>
+#include "kernel.h"
+
+#include "riscos/Vectors.h"
+
+#include "modhead.h"
+#include "os.h"
+
+
+#define DEBUG
+
+
+#ifdef DEBUG
+#define dprintf if (1) printf
+#else
+#define dprintf if (0) printf
+#endif
+
+
+/*************************************************** Gerph *********
+ Function:      osbyte_init
+ Description:   Claim vectors and initialise state
+ Parameters:    pw = module private word
+ Returns:       pointer to error, or NULL if all ok
+ ******************************************************************/
+_kernel_oserror *osbyte_init(void *pw)
+{
+    _kernel_oserror *err;
+    err = os_claim(ByteV, ByteV_Entry, pw);
+    return err;
+}
+
+
+/*************************************************** Gerph *********
+ Function:      osbyte_final
+ Description:   Release vectors and shutdown
+ Parameters:    pw = module private word
+ Returns:       pointer to error, or NULL if all ok
+ ******************************************************************/
+_kernel_oserror *osbyte_final(void *pw)
+{
+    _kernel_oserror *err;
+    err = os_release(ByteV, ByteV_Entry, pw);
+    return err;
+}
+
+
+/***************************************************************************
+ * Function:     ByteV_Handler
+ * Description:  Vector handler function
+ * Parameters:   r  = pointer to register block on entry
+ *               pw = private word for module
+ * On exit:      Update r to alter return values
+ *               Return VECTOR_CLAIM to claim (return via stack)
+ *               Return VECTOR_PASSON to pass on (return via r14)
+ * Note:         VECTOR_ERROR(error) may also be used to claim this vector,
+ *               and return with V set and R0 set to the pointer supplied.
+ **************************************************************************/
+int ByteV_Handler(_kernel_swi_regs *r, void *pw)
+{
+    dprintf("OS_Byte called with r0=%i, r1=%i, r2=%i\n", r->r[0], r->r[1], r->r[2]);
+    return VECTOR_PASSON;
+}
+
