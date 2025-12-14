@@ -12,6 +12,7 @@
 #include "riscos/Vectors.h"
 
 #include "modhead.h"
+#include "VersionNum"
 #include "os.h"
 
 
@@ -23,6 +24,22 @@
 #else
 #define dprintf if (0) printf
 #endif
+
+
+#define OSByte_ReadMOSVersion   (0x0)
+#define OSByte_ReadKeyboard     (0x81)
+
+
+/* Values we return */
+#define RISCOS_OSVersion   0xAB /* OS_Byte 129 value FIXME: Not documented */
+#define RISCOS_MachineType 0x6  /* OS_Byte 0 value */
+
+#define ErrorNumber_FX0     (0xF7)
+
+static const _kernel_oserror err_OSVersionString = {
+        ErrorNumber_FX0,
+        "RISC OS " Module_FullVersionAndDate " [RISC OS 64 variant]"
+    };
 
 
 /*************************************************** Gerph *********
@@ -66,7 +83,30 @@ _kernel_oserror *osbyte_final(void *pw)
  **************************************************************************/
 int ByteV_Handler(_kernel_swi_regs *r, void *pw)
 {
+    int reason = r->r[0];
     dprintf("OS_Byte called with r0=%i, r1=%i, r2=%i\n", r->r[0], r->r[1], r->r[2]);
+    switch (reason)
+    {
+        case OSByte_ReadMOSVersion: /*0*/
+            if (r->r[1] == 0)
+            {
+                /* On RISC OS 5, this string is constructed from the ROM trailers. */
+                /* On RISC OS Pyromaniac it is constructed from the build version */
+                /* On RISC OS Select, this string is coded into the Utility Module */
+                return VECTOR_ERROR(&err_OSVersionString);
+            }
+            r->r[1] = RISCOS_MachineType;
+            return VECTOR_CLAIM;
+
+        case OSByte_ReadKeyboard: /*129*/
+            if (r->r[1] == 0 && r->r[2] == 255)
+            {
+                r->r[1] = RISCOS_OSVersion;
+                r->r[2] = 0;
+                return VECTOR_CLAIM;
+            }
+            break;
+    }
     return VECTOR_PASSON;
 }
 
