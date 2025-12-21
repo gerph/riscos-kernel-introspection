@@ -1,0 +1,26 @@
+Code features: &807fffff
+Bit: ...............................1  SET                 OSPlatformFeaturesCode_SynchroniseCodeAreasRequired
+Bit: ..............................1.  SET                 OSPlatformFeaturesCode_IRQTriggerNecessary
+Bit: .............................1..  SET                 OSPlatformFeaturesCode_HardwareVectorsNeed32bitMode
+Bit: ............................1...  SET                 OSPlatformFeaturesCode_PCStoresPlus8
+Bit: ...........................1....  SET                 OSPlatformFeaturesCode_DataAbortsEarly
+Bit: ..........................1.....  SET                 OSPlatformFeaturesCode_CPUHasSeparateCaches
+Bit: .........................1......  SET                 OSPlatformFeaturesCode_OperatingSystemIs32Bit
+Bit: ........................1.......  SET                 OSPlatformFeaturesCode_26BitUnavailable
+Bit: .......................1........  SET                 OSPlatformFeaturesCode_CPUHasMExtensions
+Bit: ......................1.........  SET                 OSPlatformFeaturesCode_CPUSupportsThumb
+Bit: .....................1..........  SET                 OSPlatformFeaturesCode_CPUHasEExtensions
+Bit: ....................1...........  SET                 OSPlatformFeaturesCode_CPUHasNoSWP
+Bit: ...................1............  SET                 OSPlatformFeaturesCode_CPUHasLDRSTREX
+Bit: ..................1.............  SET                 OSPlatformFeaturesCode_CPUHasCLREX
+Bit: .................1..............  SET                 OSPlatformFeaturesCode_CannotDisableDCache
+Bit: ................1...............  SET                 OSPlatformFeaturesCode_CPUExtendedSmallPages
+Bit: ...............1................  SET                 OSPlatformFeaturesCode_CPUHasNoDWB
+Bit: ..............1.................  SET                 OSPlatformFeaturesCode_CPUHasBrokenAborts
+Bit: .............1..................  SET                 OSPlatformFeaturesCode_CPUIsXScale
+Bit: ............1...................  SET                 OSPlatformFeaturesCode_XScaleJTAG
+Bit: ...........1....................  SET                 OSPlatformFeaturesCode_HighVectors
+Bit: ..........1.....................  SET                 OSPlatformFeaturesCode_LargePhysicalRAM
+Bit: .........1......................  SET                 OSPlatformFeaturesCode_NoPhysicalPages
+Bit: .00000000.......................  &00000000 0         OSPlatformFeaturesCode_Reserved
+Bit: 1...............................  SET                 OSPlatformFeaturesCode_InvalidReasonsAreSafe

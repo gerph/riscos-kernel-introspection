@@ -95,17 +95,21 @@ File: bin.readmemmapinfo
 
 Test: OS_PlatformFeatures CodeFeatures
 File: bin.platformfeatures_codefeatures
+-Disable:
 
 Test: OS_PlatformFeatures CodeFeatures (configured)
 Command: $TOOL --quiet $FILE $ARGS --config osplatformfeatures.codefeatures=synchronisecodeareasrequired,hardwarevectorsneed32bitmode,pcstoresplus8,dataabortsearly,operatingsystemis32bit,26bitunavailable,highvectors,nophysicalpages,invalidreasonsaresafe,CPUHasNoSWP
 File: bin.platformfeatures_codefeatures
 Expect: expect/introspection/$BASE_configured
+Disable: Pyromaniac only
 
 Test: OS_PlatformFeatures Cache information
 File: bin.platformfeatures_cacheinfo
+-Disable:
 
 Test: OS_PlatformFeatures CPURegisters
 File: bin.platformfeatures_describecpuregisters
+-Disable:
 
 
 Group: OS_Memory Physical Table

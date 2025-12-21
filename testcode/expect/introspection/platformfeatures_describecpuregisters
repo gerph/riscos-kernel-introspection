@@ -1,0 +1,348 @@
+CPU registers descriptor:
+Arch type:      0
+Inst length:    4 - 4
+RegDump size:   68
+Register descriptors:
+  Register id       0
+    Name            r0
+    Dump offset     0
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       1
+    Name            r1
+    Dump offset     4
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       2
+    Name            r2
+    Dump offset     8
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       3
+    Name            r3
+    Dump offset     12
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       4
+    Name            r4
+    Dump offset     16
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       5
+    Name            r5
+    Dump offset     20
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       6
+    Name            r6
+    Dump offset     24
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       7
+    Name            r7
+    Dump offset     28
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       8
+    Name            r8
+    Dump offset     32
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       9
+    Name            r9
+    Dump offset     36
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       10
+    Name            r10
+    Dump offset     40
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       11
+    Name            r11
+    Dump offset     44
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       12
+    Name            r12
+    Dump offset     48
+    Register flags  &00000020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0000............  &00000000 0         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       13
+    Name            sp
+    Dump offset     52
+    Register flags  &00001020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0001............  &00000001 1         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       14
+    Name            lr
+    Dump offset     56
+    Register flags  &00002020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0010............  &00000002 2         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Register id       15
+    Name            pc
+    Dump offset     60
+    Register flags  &00023020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0011............  &00000003 3         CPURegisterFlag_Type
+      Bit: ....0010................  &00000002 2         CPURegisterFlag_BitAlignment
+  Register id       16
+    Name            CPSR
+    Dump offset     64
+    Register flags  &00004020
+      Bit: ............000000100000  &00000020 32        CPURegisterFlag_BitWidth
+      Bit: ........0100............  &00000004 4         CPURegisterFlag_Type
+      Bit: ....0000................  &00000000 0         CPURegisterFlag_BitAlignment
+  Flag definition
+    Base bit        0
+    Field type      Named+Values
+    Name            Mode
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            USR
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            FIQ
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            IRQ
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            SVC
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            0100
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            0101
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            MON
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            ABT
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            1000
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            1001
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            HYP
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            UND
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            1100
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            1101
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value+Values
+    Name            1110
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        0
+    Field type      Value/NoMore
+    Name            SYS
+    Dump offset     0 (should be 0)
+    Register flags  &00000004
+      Bit: ............000000000100  &00000004 4         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        4
+    Field type      Named+Values
+    Name            Bitness
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        4
+    Field type      Value+Values
+    Name            26bit
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        4
+    Field type      Value/NoMore
+    Name            32bit
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        5
+    Field type      Named+Values
+    Name            Encoding
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        5
+    Field type      Value+Values
+    Name            ARM
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        5
+    Field type      Value/NoMore
+    Name            Thm
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        6
+    Field type      Named/NoMore
+    Name            f
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        7
+    Field type      Named/NoMore
+    Name            i
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        8
+    Field type      Named/NoMore
+    Name            a
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        9
+    Field type      Named/NoMore
+    Name            e
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        27
+    Field type      Named/NoMore
+    Name            q
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        28
+    Field type      Named/NoMore
+    Name            v
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        29
+    Field type      Named/NoMore
+    Name            c
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        30
+    Field type      Named/NoMore
+    Name            z
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth
+  Flag definition
+    Base bit        31
+    Field type      Named/NoMore
+    Name            n
+    Dump offset     0 (should be 0)
+    Register flags  &00000001
+      Bit: ............000000000001  &00000001 1         CPURegisterFlag_BitWidth

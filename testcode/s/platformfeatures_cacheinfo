@@ -1,0 +1,76 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+OSPlatformFeaturesCacheInfo_Type_None       * 0x0
+OSPlatformFeaturesCacheInfo_Type_I          * 0x1
+OSPlatformFeaturesCacheInfo_Type_D          * 0x2
+OSPlatformFeaturesCacheInfo_Type_Split      * 0x3
+OSPlatformFeaturesCacheInfo_Type_Unified    * 0x4
+
+
+platformfeatures_codefeatures ROUT
+        MOV     r7, #0
+
+10
+        PrintMessage "Cache level "
+        PrintInteger r7
+        SWI     OS_NewLine
+
+        MOV     r0, #33
+        MOV     r1, r7
+        SWI     OS_PlatformFeatures
+
+        AND     r5, r0, #7
+        ADR     r6, msg_other
+
+        MACRO
+        CacheType $name
+        TEQ     r0, #OSPlatformFeaturesCacheInfo_Type_$name
+        ADREQ   r6, %FT20
+        B       %FT30
+20
+        = "$name", 0
+        ALIGN
+30
+        MEND
+
+        CacheType None
+        CacheType I
+        CacheType D
+        CacheType Split
+        CacheType Unified
+
+        PrintMessage "  Cache type:", 16
+        PrintString r6
+        SWI     OS_NewLine
+
+        PrintMessage "  D cache line:", 16
+        PrintInteger r1
+        SWI     OS_NewLine
+
+        PrintMessage "  D cache size:", 16
+        PrintInteger r2
+        SWI     OS_NewLine
+
+        PrintMessage "  I cache line:", 16
+        PrintInteger r3
+        SWI     OS_NewLine
+
+        PrintMessage "  I cache size:", 16
+        PrintInteger r4
+        SWI     OS_NewLine
+
+        TEQ     r5, #0
+        ADDNE   r7, r7, #1
+        BNE     %BT10
+        MOV     pc, lr
+
+
+msg_other
+        = "Other", 0
+        ALIGN
+
+        END

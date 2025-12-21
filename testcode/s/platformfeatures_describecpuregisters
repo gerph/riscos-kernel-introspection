@@ -1,0 +1,188 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+
+; Architecture register block constants
+CPURegisterType_Register           *  0<<24
+CPURegisterType_Flag               *  1<<24
+CPURegisterType                    *  15<<24
+CPURegisterTypeShift               *  24
+
+; Field values in flag type definitions
+CPURegisterTypeFlag_BaseBit         * (255<<0)
+CPURegisterTypeFlag_BaseBitShift    * 0
+CPURegisterTypeFlag_Value           * (0x3FFF<<8)
+CPURegisterTypeFlag_ValueShift      * 8
+CPURegisterTypeFlag_Name            * (0<<22)
+CPURegisterTypeFlag_NameWithValues  * (1<<22)
+CPURegisterTypeFlag_ValueEnd        * (2<<22)
+CPURegisterTypeFlag_ValueWithMore   * (3<<22)
+CPURegisterTypeFlag_FieldMask       * (3<<22)
+
+
+CPURegisterFlag_BitWidth           *  4095<<0
+CPURegisterFlag_BitWidthShift      *  0
+CPURegisterFlag_TypeGeneral        *  0
+CPURegisterFlag_TypeStack          *  1
+CPURegisterFlag_TypeLink           *  2
+CPURegisterFlag_TypePC             *  3
+CPURegisterFlag_TypeFlags          *  4
+CPURegisterFlag_Type               *  (15<<12)
+CPURegisterFlag_Type_Shift         *  12
+CPURegisterFlag_BitAlignment       *  (15<<16)
+CPURegisterFlag_BitAlignmentShift  *  16
+
+
+
+platformfeatures_cpuregisters ROUT
+        MOV     r0, #64
+        SWI     OS_PlatformFeatures
+
+        PrintLine "CPU registers descriptor:"
+
+        MOV     r8, r0
+        LDMIA   r0!, {r1, r2, r3, r4}
+        PrintMessage "Arch type:", 16
+        PrintInteger r1
+        SWI     OS_NewLine
+
+        PrintMessage "Inst length:", 16
+        PrintInteger r2
+        PrintMessage " - "
+        PrintInteger r3
+        SWI     OS_NewLine
+
+        PrintMessage "RegDump size:", 16
+        PrintInteger r4
+        SWI     OS_NewLine
+
+; r0 -> register descriptors
+        PrintLine "Register descriptors:"
+
+10
+        LDR     r1, [r0]
+        CMP     r1, #-1
+        BEQ     %FT90
+
+        AND     r2, r1, #CPURegisterType
+        TEQ     r2, #CPURegisterType_Register
+        BEQ     %FT100
+
+        AND     r2, r1, #CPURegisterType
+        TEQ     r2, #CPURegisterType_Flag
+        BEQ     %FT200
+
+        PrintMessage "  Unrecognised descriptor type "
+        MOV     r2, r2, LSR #CPURegisterTypeShift
+        PrintInteger r2
+        PrintMessage " (value="
+        PrintHex r1
+        PrintMessage ")"
+        SWI     OS_NewLine
+        B       %FT80
+
+100
+        PrintMessage "  Register id", 20
+        BIC     r2, r1, #CPURegisterType
+        PrintInteger r2
+        SWI     OS_NewLine
+
+        LDR     r2, [r0, #4]
+        ADD     r2, r2, r8
+        PrintMessage "    Name", 20
+        PrintString r2
+        SWI     OS_NewLine
+
+        LDR     r2, [r0, #8]
+        PrintMessage "    Dump offset", 20
+        PrintInteger r2
+        SWI     OS_NewLine
+
+        LDR     r2, [r0, #12]
+        PrintMessage "    Register flags", 20
+        PrintHex r2
+        SWI     OS_NewLine
+
+        PrintMessage "      "
+        PrintNamedBits r2, CPURegisterFlag_BitWidth, 24
+        PrintMessage "      "
+        PrintNamedBits r2, CPURegisterFlag_Type, 24
+        PrintMessage "      "
+        PrintNamedBits r2, CPURegisterFlag_BitAlignment, 24
+
+        B       %FT80
+
+200
+        PrintLine "  Flag definition"
+        PrintMessage "    Base bit", 20
+        AND     r2, r1, #CPURegisterTypeFlag_BaseBit
+        PrintInteger r2
+        SWI     OS_NewLine
+
+        PrintMessage "    Field type", 20
+        TST     r1, #1<<23
+        ADREQ   r3, field_name
+        ADRNE   r3, field_value
+        PrintString r3
+        TST     r1, #1<<22
+        ADREQ   r3, field_novalues
+        ADRNE   r3, field_hasvalues
+        PrintString r3
+
+        TST     r2, #1<<23
+        BEQ     %FT210
+
+        PrintMessage " (value="
+        LDR     r3, =CPURegisterTypeFlag_Value
+        AND     r2, r1, r3
+        MOV     r2, r2, LSR #CPURegisterTypeFlag_ValueShift
+        PrintHex r2
+        PrintMessage ")"
+
+210
+        SWI     OS_NewLine
+
+        LDR     r2, [r0, #4]
+        ADD     r2, r2, r8
+        PrintMessage "    Name", 20
+        PrintString r2
+        SWI     OS_NewLine
+
+        LDR     r2, [r0, #8]
+        PrintMessage "    Dump offset", 20
+        PrintInteger r2
+        PrintMessage " (should be 0)"
+        SWI     OS_NewLine
+
+        LDR     r2, [r0, #12]
+        PrintMessage "    Register flags", 20
+        PrintHex r2
+        SWI     OS_NewLine
+
+        PrintMessage "      "
+        PrintNamedBits r2, CPURegisterFlag_BitWidth, 24
+
+        B       %FT80
+
+; These pairs are the same length to make the columns line up
+field_name      = "Named", 0
+        ALIGN
+field_value     = "Value", 0
+        ALIGN
+field_novalues  = "/NoMore", 0
+        ALIGN
+field_hasvalues = "+Values", 0
+        ALIGN
+
+; next entry
+80
+        ADD     r0, r0, #16
+        B       %BT10
+
+90
+        MOV     pc, lr
+
+        END

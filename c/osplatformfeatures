@@ -17,7 +17,7 @@
 #include "modhead.h"
 
 
-#define DEBUG
+//#define DEBUG
 
 
 #ifdef DEBUG
@@ -154,6 +154,15 @@ _kernel_oserror *platformfeatures_cacheinformation(_kernel_swi_regs *r)
             r->r[2] = 0;             // No D cache
             r->r[3] = 4096;          // I cache line is up to a page long (as basic blocks cannot be larger than that)
             r->r[4] = 0xFFFFFFFF;    // I cache could be as large as our whole memory
+            err = NULL;
+            break;
+
+        case 1:
+            r->r[0] = 0;             // No cache - this is the end of the list.
+            r->r[1] = 0;
+            r->r[2] = 0;
+            r->r[3] = 0;
+            r->r[4] = 0;
             err = NULL;
             break;
 

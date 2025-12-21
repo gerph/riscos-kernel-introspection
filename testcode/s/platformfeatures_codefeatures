@@ -1,0 +1,70 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+OSPlatformFeaturesCode_SynchroniseCodeAreasRequired * 0x1
+OSPlatformFeaturesCode_IRQTriggerNecessary          * 0x2
+OSPlatformFeaturesCode_HardwareVectorsNeed32bitMode * 0x4
+OSPlatformFeaturesCode_PCStoresPlus8                * 0x8
+OSPlatformFeaturesCode_DataAbortsEarly              * 0x10
+OSPlatformFeaturesCode_CPUHasSeparateCaches         * 0x20
+OSPlatformFeaturesCode_OperatingSystemIs32Bit       * 0x40
+OSPlatformFeaturesCode_26BitUnavailable             * 0x80
+OSPlatformFeaturesCode_CPUHasMExtensions            * (1<<8)
+OSPlatformFeaturesCode_CPUSupportsThumb             * (1<<9)
+OSPlatformFeaturesCode_CPUHasEExtensions            * (1<<10)
+OSPlatformFeaturesCode_CPUHasNoSWP                  * (1<<11)
+OSPlatformFeaturesCode_CPUHasLDRSTREX               * (1<<12)
+OSPlatformFeaturesCode_CPUHasCLREX                  * (1<<13)
+OSPlatformFeaturesCode_CannotDisableDCache          * (1<<14)
+OSPlatformFeaturesCode_CPUExtendedSmallPages        * (1<<15)
+OSPlatformFeaturesCode_CPUHasNoDWB                  * (1<<16)
+OSPlatformFeaturesCode_CPUHasBrokenAborts           * (1<<17)
+OSPlatformFeaturesCode_CPUIsXScale                  * (1<<18)
+OSPlatformFeaturesCode_XScaleJTAG                   * (1<<19)
+OSPlatformFeaturesCode_HighVectors                  * (1<<20)
+OSPlatformFeaturesCode_LargePhysicalRAM             * (1<<21)
+OSPlatformFeaturesCode_NoPhysicalPages              * (1<<22)
+OSPlatformFeaturesCode_Reserved                     * (255<<23)
+OSPlatformFeaturesCode_InvalidReasonsAreSafe        * (1<<31)
+
+
+platformfeatures_codefeatures ROUT
+        MOV     r0, #0
+        SWI     OS_PlatformFeatures
+
+        PrintMessage "Code features: ", 0
+        PrintHex r0, 8
+        SWI     OS_NewLine
+
+        PrintNamedBits r0, OSPlatformFeaturesCode_SynchroniseCodeAreasRequired, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_IRQTriggerNecessary, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_HardwareVectorsNeed32bitMode, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_PCStoresPlus8, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_DataAbortsEarly, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasSeparateCaches, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_OperatingSystemIs32Bit, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_26BitUnavailable, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasMExtensions, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUSupportsThumb, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasEExtensions, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasNoSWP, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasLDRSTREX, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasCLREX, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CannotDisableDCache, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUExtendedSmallPages, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasNoDWB, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUHasBrokenAborts, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_CPUIsXScale, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_XScaleJTAG, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_HighVectors, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_LargePhysicalRAM, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_NoPhysicalPages, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_Reserved, 32
+        PrintNamedBits r0, OSPlatformFeaturesCode_InvalidReasonsAreSafe, 32
+
+        MOV     pc, lr
+
+        END

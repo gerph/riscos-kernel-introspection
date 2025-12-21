@@ -1,3 +1,3 @@
 Invalid request
 OS_ReadSysInfo #99
-Error returned: [&00840000] NotImplemented:Not implemented
+Error returned: [&000001ec] BadReadSysInfo:Unknown OS_ReadSysInfo call
