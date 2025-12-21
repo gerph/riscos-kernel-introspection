@@ -47,6 +47,7 @@ OBJS       = o.modhead \
              o.osreadsysinfo \
              o.osplatformfeatures \
              o.osmemmap \
+             o.osmemory \
              o.osswis \
 
 
@@ -58,6 +59,7 @@ $(OZDIR).osbyte: h.modhead
 $(OZDIR).osreadsysinfo: h.modhead
 $(OZDIR).osplatformfeatures: h.modhead
 $(OZDIR).osmemmap: h.modhead
+$(OZDIR).osmemory: h.modhead
 
 # Export rules
 # For any files you export with EXPORTS you may need to include an

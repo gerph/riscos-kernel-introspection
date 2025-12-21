@@ -1,0 +1,218 @@
+/*******************************************************************
+ * File:        osmemory
+ * Purpose:     Interface to control memory tables
+ * Author:      Gerph
+ * Date:        21 Dec 2025
+ ******************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "kernel.h"
+
+#include "modhead.h"
+
+#include "riscos/OSMemory.h"
+
+//#define DEBUG
+
+
+#ifdef DEBUG
+#define dprintf if (1) printf
+#else
+#define dprintf if (0) printf
+#endif
+
+
+_kernel_oserror *osmemory_convert(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_readphysicaltablesize(_kernel_swi_regs *r)
+{
+    /*
+    OS_Memory &06 - Reads the size of the physical memory arrangement table
+
+    =>  R0 = 6 (reason code); all flags are reserved, so bits 8 - 31 must be clear
+
+    <=  R0 preserved
+        R1 = table size (in bytes)
+        R2 = page size (in bytes)
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_readphysicaltable(_kernel_swi_regs *r)
+{
+    /*
+    OS_Memory &07 - Reads the physical memory arrangement table
+
+    =>  R0 = 7 (reason code); all flags are reserved, so bits 8 - 31 must be clear
+        R1 = pointer to table to be filled in, with 4 bits per page, from page 0.
+                bit 0-2:    0   no memory
+                            1   DRAM
+                            2   VRAM
+                            3   ROM
+                            4   I/O
+                            5-7 undefined
+                bit 3:      0   available for allocation
+                            1   not available for allocation
+
+    <=  R0, R1 preserved
+
+    Note: This doesn't seem to work properly on Select; it writes much more data than
+          it claims is in the table.
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_amounts(_kernel_swi_regs *r)
+{
+    /*
+    OS_Memory &08 - Read amounts of memory
+
+    =>  R0 = reason code and flags:
+                Bits    Meaning
+                0 - 7   8 (reason code)
+                8 - 11  type of memory:
+                            1 => DRAM
+                            2 => VRAM
+                            3 => ROM
+                            4 => I/O
+                            5 => Soft ROM
+                12 - 31 reserved (must be clear)
+
+    <=  R0 preserved
+        R1 = number of pages of specified sort of memory
+        R2 = page size (in bytes)
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_iospace(_kernel_swi_regs *r)
+{
+    /*
+    OS_Memory &09 - Read controller presence and base address
+
+    =>  R0 = reason code and flags:
+                Bits    Meaning
+                0 - 7   9 (reason code)
+                8 - 31  reserved (must be clear)
+        R1 = controller ID:
+                Bits    Meaning
+                0 - 7   Controller sequence number
+                8 - 31  Controller type:
+                            0   EASI card access speed control
+                            1   EASI space
+                            2   VIDC1
+                            3   VIDC20
+                            4   SSpace
+                            5   Extension ROMs
+                            6   Tube ULA / RiscPC OPEN bus
+                            7   SuperIO/82C710
+                            32  Primary ROM
+                            33  IOMD
+                            34  FDC37C655 or similar
+
+    <=  R0 preserved
+        R1 = controller logical base address, or 0 if not present
+    */
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_lockfreepool(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_recommendpage(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_validateaccess(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *osmemory_iospacephysical(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+
+/***************************************************************************
+ * Description:  SWI handler routine. All SWIs for this module will be
+ *               passed to these routines.
+ * Parameters:   number = SWI number within SWI chunk (i.e. 0 to 63)
+ *               r      = pointer to register block on entry
+ *               pw     = private word for module
+ * On exit:      Return NULL if SWI handled successfully, setting return
+ *               register values (r0-r9) in r.
+ *               Return error_BAD_SWI for out of range SWIs.
+ *               Return an error block for a custom error.
+ **************************************************************************/
+/* Functions called to handle particular SWI calls */
+_kernel_oserror *SWI_Memory(int number, _kernel_swi_regs *r, void *pw)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    int reason = r->r[0];
+
+    dprintf("OS_Memory #%i\n", reason);
+
+    switch (reason)
+    {
+        case OSMemoryReason_Convert:
+            err = osmemory_convert(r);
+            break;
+
+        case OSMemoryReason_ReadPhysicalTableSize:
+            err = osmemory_readphysicaltablesize(r);
+            break;
+
+        case OSMemoryReason_ReadPhysicalTable:
+            err = osmemory_readphysicaltable(r);
+            break;
+
+        case OSMemoryReason_Amounts:
+            err = osmemory_amounts(r);
+            break;
+
+        case OSMemoryReason_IOSpace:
+            err = osmemory_iospace(r);
+            break;
+
+        case OSMemoryReason_LockFreePool:
+            err = osmemory_lockfreepool(r);
+            break;
+
+        case OSMemoryReason_RecommendPage:
+            err = osmemory_recommendpage(r);
+            break;
+
+        case OSMemoryReason_ValidateAccess:
+            err = osmemory_validateaccess(r);
+            break;
+
+        case OSMemoryReason_IOSpacePhysical:
+            err = osmemory_iospacephysical(r);
+            break;
+
+        default:
+            /* FIXME: Should be Bad OS_Memory */
+            err = err_NotImplemented;
+            break;
+    }
+    return err;
+}

@@ -94,6 +94,7 @@ OSSWI(OSSWI_ReadSysInfo, SWI_ReadSysInfo(0, r, pw))
 OSSWI(OSSWI_PlatformFeatures, SWI_PlatformFeatures(0, r, pw))
 OSSWI(OSSWI_ReadMemMapInfo, SWI_ReadMemMapInfo(0, r, pw))
 OSSWI(OSSWI_ReadMemMapEntries, SWI_ReadMemMapEntries(0, r, pw))
+OSSWI(OSSWI_Memory, SWI_Memory(0, r, pw))
 
 
 /*************************************************** Gerph *********
@@ -131,6 +132,7 @@ void register_osswis(void *pw, bool reg)
     REGISTER(OS_PlatformFeatures, Entry_PlatformFeatures);
     REGISTER(OS_ReadMemMapInfo, Entry_ReadMemMapInfo);
     REGISTER(OS_ReadMemMapEntries, Entry_ReadMemMapEntries);
+    REGISTER(OS_Memory, Entry_Memory);
 }
 
 #endif

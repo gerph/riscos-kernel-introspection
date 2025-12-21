@@ -101,7 +101,8 @@ swi-decoding-table: KernelIntrospection \
                         ReadSysInfo/SWI_ReadSysInfo,
                         PlatformFeatures/SWI_PlatformFeatures,
                         ReadMemMapInfo/SWI_ReadMemMapInfo,
-                        ReadMemMapEntries/SWI_ReadMemMapEntries
+                        ReadMemMapEntries/SWI_ReadMemMapEntries,
+                        Memory/SWI_Memory
 #endif
 
 ; The library initialisation code sets up the C environment for use with
@@ -133,7 +134,8 @@ generic-veneers: \
         Entry_ReadSysInfo/OSSWI_ReadSysInfo,
         Entry_PlatformFeatures/OSSWI_PlatformFeatures,
         Entry_ReadMemMapInfo/OSSWI_ReadMemMapInfo,
-        Entry_ReadMemMapEntries/OSSWI_ReadMemMapEntries
+        Entry_ReadMemMapEntries/OSSWI_ReadMemMapEntries,
+        Entry_Memory/OSSWI_Memory
 #endif
 
 ; IRQ veneers are the old name for vector-handlers. Use vector-handlers in
