@@ -496,7 +496,7 @@ _kernel_oserror *SWI_ReadSysInfo(int number, _kernel_swi_regs *r, void *pw)
 
         default:
         /* FIXME: Should be Bad ReadSysInfo */
-            err = err_NotImplemented;
+            err = err_BadReadSysInfo;
             break;
     }
     return err;

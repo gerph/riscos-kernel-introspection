@@ -11,8 +11,8 @@
 
 #include "riscos/Vectors.h"
 
-#include "modhead.h"
 #include "VersionNum"
+#include "modhead.h"
 #include "os.h"
 
 

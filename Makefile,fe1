@@ -45,6 +45,7 @@ OBJS       = o.modhead \
              o.os \
              o.osbyte \
              o.osreadsysinfo \
+             o.osplatformfeatures \
              o.osswis \
 
 

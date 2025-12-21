@@ -1,0 +1,136 @@
+/*******************************************************************
+ * File:        osplatformfeatures
+ * Purpose:     Implementation of the OS_PlatformFeatures SWI calls
+ * Author:      Gerph
+ * Date:        21 Dec 2025
+ ******************************************************************/
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "kernel.h"
+#include "swis.h"
+
+#include "riscos/OSPlatformFeatures.h"
+
+#include "modhead.h"
+
+
+#define DEBUG
+
+
+#ifdef DEBUG
+#define dprintf if (1) printf
+#else
+#define dprintf if (0) printf
+#endif
+
+#ifndef OS_PlatformFeatures_CPUVectorsLocation
+#define OS_PlatformFeatures_CPUVectorsLocation           (0x20)
+#define OS_PlatformFeatures_CacheInformation             (0x21)
+#define OS_PlatformFeatures_CPUFeatures                  (0x22)
+#define OS_PlatformFeatures_ReadClearExclusiveMonitor    (0x23)
+#define OS_PlatformFeatures_DescribeCPURegisters         (0x40)
+#endif
+
+
+_kernel_oserror *platformfeatures_readcodefeatures(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *platformfeatures_readmmufeatures(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *platformfeatures_cpuvectorslocation(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *platformfeatures_cacheinformation(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *platformfeatures_cpufeatures(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *platformfeatures_readclearexclusivemonitor(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+_kernel_oserror *platformfeatures_describecpuregisters(_kernel_swi_regs *r)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    return err;
+}
+
+
+
+/***************************************************************************
+ * Description:  SWI handler routine. All SWIs for this module will be
+ *               passed to these routines.
+ * Parameters:   number = SWI number within SWI chunk (i.e. 0 to 63)
+ *               r      = pointer to register block on entry
+ *               pw     = private word for module
+ * On exit:      Return NULL if SWI handled successfully, setting return
+ *               register values (r0-r9) in r.
+ *               Return error_BAD_SWI for out of range SWIs.
+ *               Return an error block for a custom error.
+ **************************************************************************/
+/* Functions called to handle particular SWI calls */
+_kernel_oserror *SWI_PlatformFeatures(int number, _kernel_swi_regs *r, void *pw)
+{
+    _kernel_oserror *err = err_NotImplemented;
+    int reason = r->r[0];
+
+    dprintf("OS_PlatformFeatures #%i\n", reason);
+
+    switch (reason)
+    {
+        case OS_PlatformFeatures_ReadCodeFeatures:
+            err = platformfeatures_readcodefeatures(r);
+            break;
+
+        case OS_PlatformFeatures_ReadMMUFeatures:
+            err = platformfeatures_readmmufeatures(r);
+            break;
+
+        case OS_PlatformFeatures_CPUVectorsLocation:
+            err = platformfeatures_cpuvectorslocation(r);
+            break;
+
+        case OS_PlatformFeatures_CacheInformation:
+            err = platformfeatures_cacheinformation(r);
+            break;
+
+        case OS_PlatformFeatures_CPUFeatures:
+            err = platformfeatures_cpufeatures(r);
+            break;
+
+        case OS_PlatformFeatures_ReadClearExclusiveMonitor:
+            err = platformfeatures_readclearexclusivemonitor(r);
+            break;
+
+        case OS_PlatformFeatures_DescribeCPURegisters:
+            err = platformfeatures_describecpuregisters(r);
+            break;
+
+        default:
+        /* FIXME: Should be Bad PlatformFeatures */
+            err = err_NotImplemented;
+            break;
+    }
+    return err;
+}
