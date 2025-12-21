@@ -1,0 +1,91 @@
+/*******************************************************************
+ * File:        osmemmap
+ * Purpose:     Interfaces to the memory mapping subsystems
+ * Author:      Gerph
+ * Date:        21 Dec 2025
+ ******************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "kernel.h"
+
+#include "modhead.h"
+
+//#define DEBUG
+
+
+#ifdef DEBUG
+#define dprintf if (1) printf
+#else
+#define dprintf if (0) printf
+#endif
+
+
+
+
+/***************************************************************************
+ * Description:  SWI handler routine. All SWIs for this module will be
+ *               passed to these routines.
+ * Parameters:   number = SWI number within SWI chunk (i.e. 0 to 63)
+ *               r      = pointer to register block on entry
+ *               pw     = private word for module
+ * On exit:      Return NULL if SWI handled successfully, setting return
+ *               register values (r0-r9) in r.
+ *               Return error_BAD_SWI for out of range SWIs.
+ *               Return an error block for a custom error.
+ **************************************************************************/
+/* Functions called to handle particular SWI calls */
+_kernel_oserror *SWI_ReadMemMapInfo(int number, _kernel_swi_regs *r, void *pw)
+{
+    /*
+    OS_ReadMemMapInfo - Read the page size and count
+
+    <=  R0 = page size in bytes
+        R1 = number of pages
+    */
+    _kernel_oserror *err = NULL;
+    uint32_t pagesize = 4096; /* FIXME: Make these abstractions */
+    uint32_t npages = 0;
+
+    r->r[0] = pagesize;
+    r->r[1] = npages;
+    return err;
+}
+
+
+#define MEMMAP_NOPAGE_NUMBER (-1)
+typedef struct memmapentry_s {
+    int32_t pagenumber;
+    uint32_t address;
+    uint32_t protection;
+} memmapentry_t;
+
+_kernel_oserror *SWI_ReadMemMapEntries(int number, _kernel_swi_regs *r, void *pw)
+{
+    /*
+    OS_ReadMemMapEntries - Read the details of the page entries
+
+    =>  r0 -> table to update
+    <=  all preserved
+
+    The table contains 3-word entries, the first of which is a page number, terminated by -1.
+    Table is updated with a series of 3 word entries, terminated by page -1.
+
+    +0     logical page number (numbered from 0)
+    +4     logical address
+    +8     protection level (0=>R/W, 1=>RO in user, R/W in others, 2/3=> no access in user, R/W in others)
+    */
+#ifdef __riscos64
+    _kernel_oserror *err = err_NotImplemented;
+#else
+    _kernel_oserror *err = NULL;
+    memmapentry_t *memmap = (memmapentry_t *)r->r[0];
+
+    /* FIXME: We are just reporting no pages at all */
+    memmap->pagenumber = MEMMAP_NOPAGE_NUMBER;
+#endif
+    return err;
+}
+

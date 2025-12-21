@@ -92,6 +92,8 @@ _kernel_oserror * entry (_kernel_swi_regs *r, void *pw) \
 
 OSSWI(OSSWI_ReadSysInfo, SWI_ReadSysInfo(0, r, pw))
 OSSWI(OSSWI_PlatformFeatures, SWI_PlatformFeatures(0, r, pw))
+OSSWI(OSSWI_ReadMemMapInfo, SWI_ReadMemMapInfo(0, r, pw))
+OSSWI(OSSWI_ReadMemMapEntries, SWI_ReadMemMapEntries(0, r, pw))
 
 
 /*************************************************** Gerph *********
@@ -127,6 +129,8 @@ void register_osswis(void *pw, bool reg)
 
     REGISTER(OS_ReadSysInfo, Entry_ReadSysInfo);
     REGISTER(OS_PlatformFeatures, Entry_PlatformFeatures);
+    REGISTER(OS_ReadMemMapInfo, Entry_ReadMemMapInfo);
+    REGISTER(OS_ReadMemMapEntries, Entry_ReadMemMapEntries);
 }
 
 #endif

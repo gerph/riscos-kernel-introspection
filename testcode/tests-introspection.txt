@@ -92,6 +92,11 @@ Expect: expect/introspection/$BASE_$ARG1_error
 
 Test: OS_ReadMemMapInfo
 File: bin.readmemmapinfo
+-Disable:
+
+Test: OS_ReadMemMapEntries
+File: bin.readmemmapentries
+-Disable:
 
 Test: OS_PlatformFeatures CodeFeatures
 File: bin.platformfeatures_codefeatures

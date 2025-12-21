@@ -1,0 +1,47 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.macros
+        GET     hdr.printmacros
+
+ReadSysInfoReason_KernelValue_CamEntriesPointer * 0x0
+ReadSysInfoReason_KernelValue_MaxCamEntry       * 0x1
+
+
+readmemmapinfo     ROUT
+
+        PrintLine "OS_ReadMemMapEntries"
+
+        MOV     r0, #&8000
+        MOV     r1, #0
+        STR     r1, [r0], #12
+        ADD     r1, r1, #1
+        STR     r1, [r0], #12
+        ADD     r1, r1, #1
+        STR     r1, [r0], #12
+        ADD     r1, r1, #1
+        STR     r1, [r0], #12
+        MOV     r1, #-1
+        STR     r1, [r0], #12
+
+        XSWI    OS_ReadMemMapEntries, &8000
+
+; +0    page number, -1 to terminate
+; +4    address mapped
+; +8    protection level
+10
+        LDMIA   r0!, {r1, r2, r3}
+        CMP     r1, #-1
+        BEQ     %FT90
+
+        PrintInteger r1, 8
+        PrintHex r2, 12
+        PrintInteger r3
+        SWI     OS_NewLine
+        B       %BT10
+
+90
+        MOV     pc, lr
+
+        END

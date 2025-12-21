@@ -1,0 +1,27 @@
+
+        AREA    |Test$$Code|, CODE
+
+        GET     hdr.swis
+        GET     hdr.printmacros
+
+ReadSysInfoReason_KernelValue_CamEntriesPointer * 0x0
+ReadSysInfoReason_KernelValue_MaxCamEntry       * 0x1
+
+
+readmemmapinfo     ROUT
+
+        PrintLine "OS_ReadMemMapInfo"
+
+        SWI     OS_ReadMemMapInfo
+
+        PrintMessage "Page size:", 12
+        PrintInteger r0
+        SWI     OS_NewLine
+
+        PrintMessage "Number:", 12
+        PrintInteger r1
+        SWI     OS_NewLine
+
+        MOV     pc, lr
+
+        END
