@@ -220,7 +220,7 @@ class Memory(object):
 
     def ccode(self, word_type, word_length, varname):
         words_size = (max(self.words.keys()) + word_length)
-        nwords = words_size / word_length
+        nwords = int(words_size / word_length)
         highest_string = max(self.strings.keys())
         stringbytes = highest_string + len(self.strings[highest_string]) + 1 - words_size
         lines = []
