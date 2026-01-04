@@ -21,10 +21,12 @@ arch=aarch32
 timeout=30
 
 # Files we will archive
-files=(KernelIntrospection,ffa
-       bin/*,ffc
+files=(bin/*,ffc
        testdata
       )
+
+# List of module files we will load
+modules=(KernelIntrospection)
 
 
 # We want to turn all the pyro switches into things that can be run inside the Build service.
@@ -120,12 +122,15 @@ jobs:
 EOM
 
 # Load the module
-line="RMLoad KernelIntrospection"
-if ! $quiet ; then
-    echo "      - echo *** Load module" >> .robuild.yaml
-    echo "      - echo ***   $line" >> .robuild.yaml
-fi
-echo "      - $line" >> .robuild.yaml
+for module in "${modules[@]}" ; do
+    line="RMLoad $module"
+    if ! $quiet ; then
+        echo "      - echo *** Load module '$module'" >> .robuild.yaml
+        echo "      - echo ***   $line" >> .robuild.yaml
+    fi
+    echo "      - $line" >> .robuild.yaml
+    files+=("${module},ffa")
+done
 
 # Run the necessary command
 for line in "${lines[@]}" ; do
@@ -138,6 +143,7 @@ if $quiet ; then
 fi
 
 # Archive the files we want
+rm -f /tmp/testrun.zip
 zip -q9r /tmp/testrun.zip "${files[@]}" .robuild.yaml
 
 if [[ -t 0 ]] ; then
