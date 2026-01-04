@@ -50,6 +50,11 @@ OBJS       = o.modhead \
              o.osmemory \
              o.osswis \
 
+ifeq (${BUILD64},1)
+OBJS += o.cpuregisters_aarch64
+else
+OBJS += o.cpuregisters_aarch32
+endif
 
 include CModule
 
